@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class ModelController {
@@ -41,22 +40,22 @@ public class ModelController {
     }
 
     @RequestMapping(value = "/model",
-        produces = {"application/json", "application/xml"},
-        method = RequestMethod.GET)
+            produces = {"application/json", "application/xml"},
+            method = RequestMethod.GET)
     public ResponseEntity<List<Model>> getModels() {
         return ResponseEntity.ok(modelService.getAllModels());
     }
 
     @RequestMapping(value = "/model/{name}",
-        produces = {"application/json", "application/xml"},
-        method = RequestMethod.GET)
+            produces = {"application/json", "application/xml"},
+            method = RequestMethod.GET)
     public ResponseEntity<Model> getModel(@PathVariable String name) {
         return ResponseEntity.ok(modelService.findModel(name));
     }
 
     @RequestMapping(value = "/model/status/{name}",
-        produces = {"application/json", "application/xml"},
-        method = RequestMethod.GET)
+            produces = {"application/json", "application/xml"},
+            method = RequestMethod.GET)
     public ResponseEntity<ModelStatus> getModelStatus(@PathVariable String name) {
         return ResponseEntity.ok(ModelStatus.transfromFromModel(
                 modelService.findModel(name)

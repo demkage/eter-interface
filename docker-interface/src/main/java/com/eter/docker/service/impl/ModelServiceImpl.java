@@ -40,7 +40,7 @@ public class ModelServiceImpl implements ModelService {
         while (iterator.hasNext()) {
             Model current = iterator.next();
 
-            if(current.getName().equals(name)) {
+            if (current.getName().equals(name)) {
                 model = Optional.of(current);
                 break;
             }

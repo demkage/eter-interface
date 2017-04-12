@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableAutoConfiguration
 public class DockerInterfaceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DockerInterfaceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(DockerInterfaceApplication.class, args);
+    }
 }

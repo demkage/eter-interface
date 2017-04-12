@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Target({ElementType.CONSTRUCTOR, ElementType.FIELD,
-    ElementType.METHOD, ElementType.TYPE})
+        ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Qualifier
 public @interface Active {

@@ -14,6 +14,19 @@ public class ModelStatus {
         status = "Unknown Model";
     }
 
+    public static ModelStatus transfromFromModel(Model model) {
+        if (model == null) {
+            return new ModelStatus();
+        } else {
+            ModelStatus status = new ModelStatus();
+            status.setStatus(model.getStatus());
+            status.setCompleted(model.getComplete());
+            status.setName(model.getName());
+
+            return status;
+        }
+    }
+
     public String getStatus() {
         return status;
     }
@@ -36,18 +49,5 @@ public class ModelStatus {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public static ModelStatus transfromFromModel(Model model) {
-        if(model == null) {
-            return new ModelStatus();
-        } else {
-            ModelStatus status = new ModelStatus();
-            status.setStatus(model.getStatus());
-            status.setCompleted(model.getComplete());
-            status.setName(model.getName());
-
-            return status;
-        }
     }
 }
