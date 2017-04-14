@@ -18,6 +18,7 @@ public class AvailableCommandsImpl implements AvailableCommands {
         return commands;
     }
 
+
     public void setCommands(Map<String, String> commands) {
         this.commands = commands;
     }

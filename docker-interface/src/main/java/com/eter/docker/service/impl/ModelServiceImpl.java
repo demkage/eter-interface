@@ -3,7 +3,6 @@ package com.eter.docker.service.impl;
 import com.eter.docker.domain.Model;
 import com.eter.docker.repository.ModelRepository;
 import com.eter.docker.service.ModelService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,10 +15,10 @@ public class ModelServiceImpl implements ModelService {
 
     private ModelRepository modelRepository;
 
-    @Autowired
-    public void setModelRepository(ModelRepository modelRepository) {
-        this.modelRepository = modelRepository;
-    }
+//    @Autowired
+//    public void setModelRepository(ModelRepository modelRepository) {
+//        this.modelRepository = modelRepository;
+//    }
 
     @Override
     public List<Model> getAllModels() {
