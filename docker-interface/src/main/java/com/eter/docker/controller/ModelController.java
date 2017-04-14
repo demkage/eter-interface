@@ -21,10 +21,10 @@ public class ModelController {
     private ModelService modelService;
     private AvailableCommands availableCommands;
 
-//    @Autowired
-//    public void setModelService(ModelService modelService) {
-//        this.modelService = modelService;
-//    }
+    @Autowired
+    public void setModelService(ModelService modelService) {
+        this.modelService = modelService;
+    }
 
     @Autowired
     @Active
