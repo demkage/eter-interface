@@ -7,8 +7,4 @@ public interface ApplicationDescriptor {
     Long getId();
 
     String getName();
-
-    boolean isRunning();
-
-    boolean isComplete();
 }

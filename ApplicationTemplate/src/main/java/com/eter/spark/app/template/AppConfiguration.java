@@ -3,12 +3,12 @@ package com.eter.spark.app.template;
 /**
  * Created by abosii on 4/18/2017.
  */
-public class Configuration {
+public class AppConfiguration {
     private ApplicationDescriptor applicationDescriptor;
     private Environment environment;
 
 
-    public Configuration(Environment environment, ApplicationDescriptor applicationDescriptor) {
+    public AppConfiguration(Environment environment, ApplicationDescriptor applicationDescriptor) {
         this.environment = environment;
         this.applicationDescriptor = applicationDescriptor;
     }

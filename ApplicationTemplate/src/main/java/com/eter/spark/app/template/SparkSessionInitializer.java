@@ -11,12 +11,16 @@ import org.apache.spark.sql.SparkSession;
  * Created by abosii on 4/18/2017.
  */
 public abstract class SparkSessionInitializer {
-    private Configuration configuration;
+    private AppConfiguration appConfiguration;
     private SparkContext sparkContext;
     private SparkSession sparkSession;
 
-    public void setConfiguration(Configuration configuration) {
-        this.configuration = configuration;
+    public SparkSessionInitializer(AppConfiguration appConfiguration) {
+        this.appConfiguration = appConfiguration;
+    }
+
+    public void setAppConfiguration(AppConfiguration appConfiguration) {
+        this.appConfiguration = appConfiguration;
     }
 
     public SparkContext getSparkContext() {
@@ -32,13 +36,13 @@ public abstract class SparkSessionInitializer {
     }
 
     protected void init() throws SparkAppException {
-        if (configuration == null)
-            throw new NoConfigurationException("Configuration is missing");
+        if (appConfiguration == null)
+            throw new NoConfigurationException("AppConfiguration is missing");
 
-        if (configuration.getApplicationDescriptor() == null)
+        if (appConfiguration.getApplicationDescriptor() == null)
             throw new MissingApplicationDescriptorException();
 
-        if (configuration.getEnvironment() == null)
+        if (appConfiguration.getEnvironment() == null)
             throw new MissingEnvironmentException();
 
         SparkSession.Builder builder = new SparkSession.Builder();
@@ -51,13 +55,13 @@ public abstract class SparkSessionInitializer {
     }
 
     private void useApplicationDescriptor(SparkSession.Builder builder) {
-        ApplicationDescriptor descriptor = configuration.getApplicationDescriptor();
+        ApplicationDescriptor descriptor = appConfiguration.getApplicationDescriptor();
 
         builder.appName(descriptor.getName());
     }
 
     private void useEnvironment(SparkSession.Builder builder) {
-        Environment environment = configuration.getEnvironment();
+        Environment environment = appConfiguration.getEnvironment();
         builder.master(environment.getSparkMasterUrl());
         builder.config("hive.metastore.uris", environment.getHiveMetastoreUrl());
 

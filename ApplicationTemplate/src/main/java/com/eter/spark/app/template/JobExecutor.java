@@ -4,6 +4,7 @@ import com.eter.spark.app.template.exceptions.SparkAppException;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created by abosii on 4/18/2017.
@@ -13,13 +14,14 @@ public class JobExecutor {
     private Extractor extractor;
     private SparkSessionInitializer initializer;
 
-    public void init(Configuration configuration, SparkSessionInitializer initializer) throws SparkAppException {
+    public void init(AppConfiguration appConfiguration, SparkSessionInitializer initializer) throws SparkAppException {
         this.initializer = initializer;
-        initializer.setConfiguration(configuration);
+        initializer.setAppConfiguration(appConfiguration);
         initializer.run();
         sparkSession = initializer.getSparkSession();
     }
 
+    @Autowired
     public void setExtractor(Extractor extractor) {
         this.extractor = extractor;
     }
