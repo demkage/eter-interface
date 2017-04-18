@@ -23,6 +23,14 @@ public abstract class SparkSessionInitializer {
         return sparkContext;
     }
 
+    public SparkSession getSparkSession() {
+        return sparkSession;
+    }
+
+    public void run() throws SparkAppException {
+        init();
+    }
+
     protected void init() throws SparkAppException {
         if (configuration == null)
             throw new NoConfigurationException("Configuration is missing");
