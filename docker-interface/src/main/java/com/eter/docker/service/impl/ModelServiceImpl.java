@@ -4,14 +4,14 @@ import com.eter.docker.domain.Model;
 import com.eter.docker.repository.ModelRepository;
 import com.eter.docker.service.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Service
 public class ModelServiceImpl implements ModelService {
 
     private ModelRepository modelRepository;

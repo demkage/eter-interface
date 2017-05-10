@@ -1,8 +1,6 @@
 package com.eter.docker.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 @Entity
@@ -11,10 +9,12 @@ public class Application {
     private Integer id;
     private String name;
     private String mainClass;
-    ///????
+    private String appArgs;
+    private String appPath;
+    private String executionDriver;
 
-
-    @Column(name = "id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }
@@ -39,5 +39,32 @@ public class Application {
 
     public void setMainClass(String mainClass) {
         this.mainClass = mainClass;
+    }
+
+    @Column(name = "appArgs")
+    public String getAppArgs() {
+        return appArgs;
+    }
+
+    public void setAppArgs(String appArgs) {
+        this.appArgs = appArgs;
+    }
+
+    @Column(name = "appPath")
+    public String getAppPath() {
+        return appPath;
+    }
+
+    public void setAppPath(String appPath) {
+        this.appPath = appPath;
+    }
+
+    @Column(name = "executionDriver", nullable = true)
+    public String getExecutionDriver() {
+        return executionDriver;
+    }
+
+    public void setExecutionDriver(String executionDriver) {
+        this.executionDriver = executionDriver;
     }
 }
