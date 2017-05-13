@@ -2,11 +2,14 @@ package com.eter.docker.service.impl;
 
 import com.eter.docker.domain.*;
 import com.eter.docker.repository.ApplicationRepository;
+import com.eter.docker.repository.ModelRepository;
 import com.eter.docker.service.ApplicationService;
+import com.eter.docker.service.ApplicationUpdateService;
 import com.eter.docker.service.RESTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -16,12 +19,19 @@ import java.util.List;
 public class ApplicationServiceImpl implements ApplicationService {
 
     private ApplicationRepository applicationRepository;
+    private ModelRepository modelRepository;
     private ApplicationSubmissionBuilder applicationSubmissionBuilder;
     private RESTService restService;
+    private ApplicationUpdateService applicationUpdateService;
 
     @Autowired
     public void setApplicationRepository(ApplicationRepository applicationRepository) {
         this.applicationRepository = applicationRepository;
+    }
+
+    @Autowired
+    public void setModelRepository(ModelRepository modelRepository) {
+        this.modelRepository = modelRepository;
     }
 
     @Autowired
@@ -32,6 +42,11 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Autowired
     public void setRestService(RESTService restService) {
         this.restService = restService;
+    }
+
+    @Autowired
+    public void setApplicationUpdateService(ApplicationUpdateService applicationUpdateService) {
+        this.applicationUpdateService = applicationUpdateService;
     }
 
     @Override
@@ -67,7 +82,27 @@ public class ApplicationServiceImpl implements ApplicationService {
         SubmissionResponse submissionResponse = restService.submit(applicationSubmission);
         if (submissionResponse.isSuccess()) {
             application.setExecutionDriver(submissionResponse.getSubmissionId());
+
+            Model model = modelRepository.findModelByName(application.getName());
+            if(model == null)
+                model = new Model();
+
+            model.setStatus("UNFINISHED");
+            model.setComplete(false);
+            model.setName(application.getName());
+            model.setPath(application.getAppArgs());
+            model.setStartTime(LocalDateTime.now());
+            model.setEndTime(null);
+
+            modelRepository.save(model);
+            application.setModel(model);
             applicationRepository.save(application);
+            applicationUpdateService.submitForUpdate(application, (applicationOnFinished, status) -> {
+                applicationOnFinished.getModel().setStatus(status.getDriverState());
+                modelRepository.save(applicationOnFinished.getModel());
+                applicationRepository.save(applicationOnFinished);
+                applicationUpdateService.dismissForUpdate(applicationOnFinished.getName());
+            });
         }
 
         return submissionResponse;

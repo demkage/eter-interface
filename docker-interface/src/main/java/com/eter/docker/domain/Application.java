@@ -12,6 +12,7 @@ public class Application {
     private String appArgs;
     private String appPath;
     private String executionDriver;
+    private Model model;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,5 +67,15 @@ public class Application {
 
     public void setExecutionDriver(String executionDriver) {
         this.executionDriver = executionDriver;
+    }
+
+    @OneToOne
+    @JoinColumn(referencedColumnName = "id", nullable = true, name = "modelid")
+    public Model getModel() {
+        return model;
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
     }
 }

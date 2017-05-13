@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * Created by rusifer on 5/9/17.
  */
@@ -17,6 +19,7 @@ public class RESTServiceImpl implements RESTService {
     private RestTemplate restTemplate;
     private String sparkSubmitUrl;
     private String sparkStatusUrl;
+    private SyncStack syncStack = new SyncStack();
 
     @Autowired
     public void setRestTemplate(RestTemplate restTemplate) {
@@ -35,11 +38,32 @@ public class RESTServiceImpl implements RESTService {
 
     @Override
     public SubmissionResponse submit(ApplicationSubmission applicationSubmission) {
-        return restTemplate.postForObject(sparkSubmitUrl, applicationSubmission, SubmissionResponse.class);
+        try {
+            syncStack.getRestService();
+            return restTemplate.postForObject(sparkSubmitUrl, applicationSubmission, SubmissionResponse.class);
+        } finally {
+            syncStack.releaseRestService();
+        }
     }
 
     @Override
     public StatusResponse check(String driverId) {
-        return restTemplate.getForObject(sparkStatusUrl + driverId, StatusResponse.class);
+        try {
+            syncStack.getRestService();
+            return restTemplate.getForObject(sparkStatusUrl + driverId, StatusResponse.class);
+        } finally {
+            syncStack.releaseRestService();
+        }
+    }
+
+    private class SyncStack {
+        private ReentrantLock restLock = new ReentrantLock();
+
+        public void getRestService() {
+            restLock.lock();
+        }
+        public void releaseRestService() {
+            restLock.unlock();
+        }
     }
 }
