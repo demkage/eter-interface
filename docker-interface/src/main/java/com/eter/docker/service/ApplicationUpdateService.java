@@ -8,6 +8,8 @@ import com.eter.docker.domain.ApplicationCallback;
  */
 public interface ApplicationUpdateService {
     boolean submitForUpdate(Application application, ApplicationCallback applicationCallback);
+
     Application getUpdateForApplication(String applicationName);
+
     boolean dismissForUpdate(String applicationName);
 }

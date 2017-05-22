@@ -75,5 +75,4 @@ public class ApplicationSubmission {
         return new ApplicationSubmissionBuilder().build(application);
     }
 
-
 }

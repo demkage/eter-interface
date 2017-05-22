@@ -80,30 +80,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         ApplicationSubmission applicationSubmission = applicationSubmissionBuilder.build(application);
         SubmissionResponse submissionResponse = restService.submit(applicationSubmission);
-        if (submissionResponse.isSuccess()) {
-            application.setExecutionDriver(submissionResponse.getSubmissionId());
 
-            Model model = modelRepository.findModelByName(application.getName());
-            if(model == null)
-                model = new Model();
-
-            model.setStatus("UNFINISHED");
-            model.setComplete(false);
-            model.setName(application.getName());
-            model.setPath(application.getAppArgs());
-            model.setStartTime(LocalDateTime.now());
-            model.setEndTime(null);
-
-            modelRepository.save(model);
-            application.setModel(model);
-            applicationRepository.save(application);
-            applicationUpdateService.submitForUpdate(application, (applicationOnFinished, status) -> {
-                applicationOnFinished.getModel().setStatus(status.getDriverState());
-                modelRepository.save(applicationOnFinished.getModel());
-                applicationRepository.save(applicationOnFinished);
-                applicationUpdateService.dismissForUpdate(applicationOnFinished.getName());
-            });
-        }
+        submitApplicationForUpdate(application, submissionResponse);
 
         return submissionResponse;
     }
@@ -131,4 +109,32 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         return restService.check(application.getExecutionDriver());
     }
+
+    private void submitApplicationForUpdate(Application application, SubmissionResponse submissionResponse) {
+        if (submissionResponse.isSuccess()) {
+            application.setExecutionDriver(submissionResponse.getSubmissionId());
+
+            Model model = modelRepository.findModelByName(application.getName());
+            if(model == null)
+                model = new Model();
+
+            model.setStatus("UNFINISHED");
+            model.setComplete(false);
+            model.setName(application.getName());
+            model.setPath(application.getAppArgs());
+            model.setStartTime(LocalDateTime.now());
+            model.setEndTime(null);
+
+            modelRepository.save(model);
+            application.setModel(model);
+            applicationRepository.save(application);
+            applicationUpdateService.submitForUpdate(application, (applicationOnFinished, status) -> {
+                applicationOnFinished.getModel().setStatus(status.getDriverState());
+                modelRepository.save(applicationOnFinished.getModel());
+                applicationRepository.save(applicationOnFinished);
+                applicationUpdateService.dismissForUpdate(applicationOnFinished.getName());
+            });
+        }
+    }
+
 }
